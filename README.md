@@ -9,9 +9,12 @@ To reproduce the environment for this project, follow these steps:
    git clone https://github.com/your-username/solar-challenge-week1.git
    cd solar-challenge-week1
 2. Create and activate a virtual environment:
+   ```bash
    python -m venv venv
    venv\Scripts\activate
-3. Install dependencies:
+4. Install dependencies:
+   ```bash
    pip install -r requirements.txt
-4. Verify the setup:
+6. Verify the setup:
+   ```bash
    python --version
