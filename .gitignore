@@ -3,3 +3,4 @@ any
 .csv/
 .ipynb_checkpoints/
 venv/
+src/__pycache__
