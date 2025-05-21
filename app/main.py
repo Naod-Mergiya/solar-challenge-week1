@@ -1,39 +1,40 @@
 import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import utils
 
-# Load data
-benin_df = pd.read_csv('data/benin_clean.csv')
-sierraleone_df = pd.read_csv('data/sierraleone_clean.csv')
-togo_df = pd.read_csv('data/togo_clean.csv')
-combined_df = pd.concat([benin_df.assign(Country='Benin'),
-                         sierraleone_df.assign(Country='Sierra Leone'),
-                         togo_df.assign(Country='Togo')])
+# Load and prepare data
+combined_df = utils.load_data()
 
 # Sidebar for interactivity
 st.sidebar.header('Filters')
-selected_countries = st.sidebar.multiselect('Select Countries', ['Benin', 'Sierra Leone', 'Togo'], default=['Benin', 'Sierra Leone', 'Togo'])
+selected_countries = st.sidebar.multiselect(
+    'Select Countries', ['Benin', 'Sierra Leone', 'Togo'], default=['Togo']
+)
+
+selected_metrics = st.sidebar.multiselect(
+    'Select Metrics to Visualize', ['GHI', 'DNI', 'DHI'], default=['GHI', 'DNI', 'DHI']
+)
 
 # Filter data
-filtered_df = combined_df[combined_df['Country'].isin(selected_countries)]
+filtered_df = utils.filter_data(combined_df, selected_countries)
 
 # Visualizations
-st.title('Solar Energy Insights Dashboard')
-st.header('Boxplots')
-fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-sns.boxplot(data=filtered_df, x='Country', y='GHI', ax=axes[0])
-axes[0].set_title('GHI')
-sns.boxplot(data=filtered_df, x='Country', y='DNI', ax=axes[1])
-axes[1].set_title('DNI')
-sns.boxplot(data=filtered_df, x='Country', y='DHI', ax=axes[2])
-axes[2].set_title('DHI')
-st.pyplot(fig)
+st.title('Solar Energy Insights Dashboard : For MoonLight Energy Solution')
 
-st.header('Average Metrics by Country')
-avg_data = filtered_df.groupby('Country')[['GHI', 'DNI', 'DHI']].mean().reset_index()
-st.bar_chart(avg_data.set_index('Country')[['GHI', 'DNI', 'DHI']])
+if selected_metrics:
+    st.header('Boxplots')
+    fig = utils.plot_boxplots(filtered_df, selected_metrics)
+    st.pyplot(fig)
 
-# Top Regions Table
-top_regions = avg_data.sort_values(by='GHI', ascending=False)
-st.table(top_regions)
+    st.header('Average Metrics by Country')
+    avg_data = utils.calculate_average_metrics(filtered_df, selected_metrics)
+    st.bar_chart(avg_data.set_index('Country')[selected_metrics])
+
+    st.header('Top Regions by GHI')
+    # Still sort by GHI for ranking (if included)
+    if 'GHI' in selected_metrics:
+        top_regions = utils.get_top_regions_by_ghi(avg_data)
+        st.table(top_regions)
+    else:
+        st.write("Top regions table is only shown when GHI is selected.")
+else:
+    st.warning("Please select at least one metric to visualize.")
