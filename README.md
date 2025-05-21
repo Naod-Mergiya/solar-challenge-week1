@@ -32,6 +32,14 @@ Reusable Python scripts to modularize tasks:
 - `visualizer.py`: Custom plotting functions.
 - `utils.py`: file loading.
 
+### `app/`
+### `/screenshoots`
+    - `streamlit-barchart.png`: screenshoot for box plots.
+    - `utils.py`: screenshoot for barchart and summary table.
+Reusable Python scripts to modularize tasks:
+- `main.py`: main python file to run the dashboard.
+- `utils.py`: functions for main.py in modularize format.
+
 ### `script/`
 
 ### `test/`
@@ -72,3 +80,11 @@ To reproduce the environment for this project, follow these steps:
 6. Verify the setup:
    ```bash
    python --version
+
+## streamlit dashboard
+   ## Link
+      `https://solar-challenge-week1-f4vvujafwxqckibbhh8axf.streamlit.app/`
+
+## Medium blog
+   ## Link
+      `https://medium.com/@mergiyanaod/cross-country-comparison-of-solar-potential-benin-sierra-leone-and-togo-34ff2a067f4f`
